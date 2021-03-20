@@ -13,57 +13,6 @@ type mOS struct {
 	waitsemacount uint32
 }
 
-//go:noescape
-func setitimer(mode int32, new, old *itimerval)
-
-//go:noescape
-func sigaction(sig uint32, new, old *sigactiont)
-
-//go:noescape
-func sigaltstack(new, old *stackt)
-
-//go:noescape
-func obsdsigprocmask(how int32, new sigset) sigset
-
-//go:nosplit
-//go:nowritebarrierrec
-func sigprocmask(how int32, new, old *sigset) {
-	n := sigset(0)
-	if new != nil {
-		n = *new
-	}
-	r := obsdsigprocmask(how, n)
-	if old != nil {
-		*old = r
-	}
-}
-
-//go:noescape
-func sysctl(mib *uint32, miblen uint32, out *byte, size *uintptr, dst *byte, ndst uintptr) int32
-
-func raiseproc(sig uint32)
-
-func getthrid() int32
-func thrkill(tid int32, sig int)
-
-//go:noescape
-func thrsleep(ident uintptr, clock_id int32, tsp *timespec, lock uintptr, abort *uint32) int32
-
-//go:noescape
-func thrwakeup(ident uintptr, n int32) int32
-
-func osyield()
-
-func kqueue() int32
-
-//go:noescape
-func kevent(kq int32, ch *keventt, nch int32, ev *keventt, nev int32, ts *timespec) int32
-
-func pipe() (r, w int32, errno int32)
-func pipe2(flags int32) (r, w int32, errno int32)
-func closeonexec(fd int32)
-func setNonblock(fd int32)
-
 const (
 	_ESRCH       = 3
 	_EWOULDBLOCK = _EAGAIN
